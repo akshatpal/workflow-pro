@@ -5,6 +5,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
 import { errorMiddleware } from "../src/common/middleware/error.middleware.js";
+import { authRoutes } from "./modules/auth/index.js";
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.get("/health", (_, res) => {
     message: "API is running",
   });
 });
+
+app.use("/api/v1/auth", authRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
