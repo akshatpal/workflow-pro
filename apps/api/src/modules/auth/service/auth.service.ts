@@ -3,6 +3,7 @@ import { comparePassword } from "../../../common/utils/password.js";
 import {
   generateAccessToken,
   generateRefreshToken,
+  verifyRefreshToken
 } from "../../../common/utils/jwt.js";
 import { UnauthorizedError } from "../../../common/errors/UnauthorizedError.js";
 
@@ -45,5 +46,31 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  static async refresh(refreshToken: string) {
+    if (!refreshToken) {
+        throw new UnauthorizedError("Refresh token missing");
+    }
+
+    const payload = verifyRefreshToken(refreshToken);
+
+    return {
+        accessToken: generateAccessToken({
+            userId: payload.userId,
+            role: payload.role,
+        }),
+    };
+  }
+
+  static async me(userId: string) {
+      const user = await User.findById(userId)
+          .select("-password");
+
+      if (!user) {
+          throw new UnauthorizedError();
+      }
+
+      return user;
   }
 }
