@@ -1,0 +1,1 @@
+export { default as columnRoutes } from "./routes/column.routes.js";

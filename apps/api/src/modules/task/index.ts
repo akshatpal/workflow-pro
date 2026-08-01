@@ -1,0 +1,1 @@
+export { default as taskRoutes } from "./routes/task.routes.js";

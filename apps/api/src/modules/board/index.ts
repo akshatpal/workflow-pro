@@ -1,0 +1,1 @@
+export { default as boardRoutes } from "./routes/board.routes.js";
