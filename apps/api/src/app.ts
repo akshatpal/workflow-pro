@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { errorMiddleware } from "../src/common/middleware/error.middleware.js";
 import { authRoutes } from "./modules/auth/index.js";
 import { userRoutes } from "./modules/user/index.js";
+import { projectRoutes } from "./modules/project/index.js";
 const app = express();
 
 app.use(cors());
@@ -28,6 +29,7 @@ app.get("/health", (_, res) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/projects", projectRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
