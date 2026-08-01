@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 
 import { connectDatabase } from "../config/database.js";
-import { User } from "../modules/user/model/user.model.js";
+import { UserModel } from "../modules/user/model/user.model.js";
 import { hashPassword } from "../common/utils/password.js";
 import { UserRole } from "../modules/user/model/user.model.js";
 
 const seedAdmin = async () => {
   await connectDatabase();
 
-  const existingAdmin = await User.findOne({
+  const existingAdmin = await UserModel.findOne({
     email: "admin@workflowpro.com",
   });
 
@@ -20,7 +20,7 @@ const seedAdmin = async () => {
 
   const password = await hashPassword("Admin@123");
 
-  await User.create({
+  await UserModel.create({
     name: "Super Admin",
     email: "admin@workflowpro.com",
     password,

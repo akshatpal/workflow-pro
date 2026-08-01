@@ -1,4 +1,4 @@
-import { User } from "../../user/model/user.model.js";
+import { User , UserModel } from "../../user/model/user.model.js";
 import { comparePassword } from "../../../common/utils/password.js";
 import {
   generateAccessToken,
@@ -9,7 +9,7 @@ import { UnauthorizedError } from "../../../common/errors/UnauthorizedError.js";
 
 export class AuthService {
   static async login(email: string, password: string) {
-    const user = await User.findOne({
+    const user = await UserModel.findOne({
       email: email.toLowerCase(),
       isActive: true,
     }).select("+password");
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   static async me(userId: string) {
-      const user = await User.findById(userId)
+      const user = await UserModel.findById(userId)
           .select("-password");
 
       if (!user) {

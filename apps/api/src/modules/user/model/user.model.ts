@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType } from "mongoose";
+import { Schema, model, InferSchemaType, HydratedDocument } from "mongoose";
 
 export enum UserRole {
   ADMIN = "ADMIN",
@@ -76,6 +76,7 @@ const userSchema = new Schema(
   }
 );
 
-export type UserDocument = InferSchemaType<typeof userSchema>;
+export type User = InferSchemaType<typeof userSchema>;
+export type UserDocument = HydratedDocument<User>;
 
-export const User = model("User", userSchema);
+export const UserModel = model<User>("User", userSchema);
