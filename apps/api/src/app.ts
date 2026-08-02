@@ -5,7 +5,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import path from "path";
 
-import { errorMiddleware } from "../src/common/middleware/error.middleware.js";
+import { errorMiddleware } from "./common/middleware/error.middleware.js";
 import { authRoutes } from "./modules/auth/index.js";
 import { userRoutes } from "./modules/user/index.js";
 import { projectRoutes } from "./modules/project/index.js";
@@ -14,6 +14,8 @@ import { columnRoutes } from "./modules/column/index.js";
 import { taskRoutes } from "./modules/task/index.js";
 import { commentRoutes } from "./modules/comment/index.js";
 import { attachmentRoutes } from "./modules/attachment/index.js";
+import { notificationRoutes } from "./modules/notification/index.js";
+import { chatRoutes } from "./modules/chat/index.js";
 
 
 
@@ -44,6 +46,8 @@ app.use("/api/v1/columns", columnRoutes);
 app.use("/api/v1/tasks", taskRoutes);
 app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/attachments",attachmentRoutes);
+app.use("/api/v1/notifications",notificationRoutes);
+app.use("/api/v1/chat", chatRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
