@@ -1,10 +1,17 @@
+import { Toaster } from "react-hot-toast";
+
+import AppRoutes from "./routes/index.tsx";
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950">
-      <h1 className="text-5xl font-bold text-green-400">
-        🚀 WorkFlow Pro
-      </h1>
-    </div>
+    <>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
+
+      <AppRoutes />
+    </>
   );
 }
 
