@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 import { errorMiddleware } from "../src/common/middleware/error.middleware.js";
 import { authRoutes } from "./modules/auth/index.js";
@@ -12,6 +13,8 @@ import { boardRoutes } from "./modules/board/index.js";
 import { columnRoutes } from "./modules/column/index.js";
 import { taskRoutes } from "./modules/task/index.js";
 import { commentRoutes } from "./modules/comment/index.js";
+import { attachmentRoutes } from "./modules/attachment/index.js";
+
 
 
 const app = express();
@@ -40,9 +43,12 @@ app.use("/api/v1/boards", boardRoutes);
 app.use("/api/v1/columns", columnRoutes);
 app.use("/api/v1/tasks", taskRoutes);
 app.use("/api/v1/comments", commentRoutes);
+app.use("/api/v1/attachments",attachmentRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
+
+app.use("/uploads",express.static(path.join(process.cwd(), "uploads")));
 
 app.use(errorMiddleware);
 
