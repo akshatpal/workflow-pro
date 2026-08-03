@@ -16,6 +16,7 @@ import { commentRoutes } from "./modules/comment/index.js";
 import { attachmentRoutes } from "./modules/attachment/index.js";
 import { notificationRoutes } from "./modules/notification/index.js";
 import { chatRoutes } from "./modules/chat/index.js";
+import { dashboardRoutes } from "./modules/dashboard/index.js";
 
 
 
@@ -70,6 +71,7 @@ app.use("/api/v1/comments", commentRoutes);
 app.use("/api/v1/attachments",attachmentRoutes);
 app.use("/api/v1/notifications",notificationRoutes);
 app.use("/api/v1/chat", chatRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
