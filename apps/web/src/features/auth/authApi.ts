@@ -1,4 +1,4 @@
-import { api } from "../../store/api";
+import { api } from "@/store/api";
 
 import type {
   LoginRequest,
@@ -8,7 +8,10 @@ import type {
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<LoginResponse, LoginRequest>({
+    login: builder.mutation<
+      LoginResponse,
+      LoginRequest
+    >({
       query: (body) => ({
         url: "/auth/login",
 
@@ -29,7 +32,10 @@ export const authApi = api.injectEndpoints({
       providesTags: ["Auth"],
     }),
 
-    refresh: builder.mutation({
+    refresh: builder.mutation<
+      LoginResponse,
+      void
+    >({
       query: () => ({
         url: "/auth/refresh",
 
@@ -37,22 +43,24 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    logout: builder.mutation({
+    logout: builder.mutation<
+      any,
+      void
+    >({
       query: () => ({
         url: "/auth/logout",
 
         method: "POST",
       }),
+
+      invalidatesTags: ["Auth"],
     }),
   }),
 });
 
 export const {
   useLoginMutation,
-
   useMeQuery,
-
   useRefreshMutation,
-
   useLogoutMutation,
 } = authApi;

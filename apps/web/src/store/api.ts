@@ -1,16 +1,24 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 
-export const api = createApi({
-  reducerPath: "api",
 
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+
+const baseQuery =
+  fetchBaseQuery({
+    baseUrl:
+      import.meta.env.VITE_API_URL,
 
     credentials: "include",
 
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as any).auth.accessToken;
+    prepareHeaders: (
+      headers,
+      { getState }
+    ) => {
+      const token = (
+        getState() as any
+      ).auth.accessToken as string | null;
 
       if (token) {
         headers.set(
@@ -21,16 +29,74 @@ export const api = createApi({
 
       return headers;
     },
-  }),
+  });
 
-  tagTypes: [
-    "Auth",
-    "Project",
-    "Board",
-    "Task",
-    "Comment",
-    "Notification",
-  ],
+const baseQueryWithRefresh =
+  async (
+    args: any,
+    api: any,
+    extraOptions: any
+  ) => {
+    let result =
+      await baseQuery(
+        args,
+        api,
+        extraOptions
+      );
 
-  endpoints: () => ({}),
-});
+    if (
+      result.error &&
+      result.error.status === 401
+    ) {
+      const refreshResult =
+        await baseQuery(
+          {
+            url: "/auth/refresh",
+            method: "POST",
+          },
+          api,
+          extraOptions
+        );
+
+      if (refreshResult.data) {
+        api.dispatch({
+          type:
+            "auth/setCredentials",
+          payload:
+            (refreshResult.data as { data: unknown }).data,
+        });
+
+        result =
+          await baseQuery(
+            args,
+            api,
+            extraOptions
+          );
+      } else {
+        api.dispatch({
+          type: "auth/logout",
+        });
+      }
+    }
+
+    return result;
+  };
+
+export const api =
+  createApi({
+    reducerPath: "api",
+
+    baseQuery:
+      baseQueryWithRefresh,
+
+    tagTypes: [
+      "Auth",
+      "Project",
+      "Board",
+      "Task",
+      "Comment",
+      "Notification",
+    ],
+
+    endpoints: () => ({}),
+  });

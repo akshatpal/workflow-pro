@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
 
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "@/store/hooks";
+
+import SplashPage from "@/pages/SplashPage";
 
 interface Props {
   children: React.ReactNode;
@@ -9,10 +11,16 @@ interface Props {
 export default function ProtectedRoute({
   children,
 }: Props) {
-  const { isAuthenticated } =
-    useAppSelector(
-      (state) => state.auth
-    );
+  const {
+    initialized,
+    isAuthenticated,
+  } = useAppSelector(
+    (state) => state.auth
+  );
+
+  if (!initialized) {
+    return <SplashPage />;
+  }
 
   if (!isAuthenticated) {
     return (

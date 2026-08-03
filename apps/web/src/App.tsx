@@ -1,18 +1,25 @@
 import { Toaster } from "react-hot-toast";
 
-import AppRoutes from "./routes/index.tsx";
+import AppRoutes from "./routes";
 
-function App() {
+import useAuth from "./hooks/useAuth";
+
+import SplashPage from "./pages/SplashPage";
+
+export default function App() {
+  const {
+    isLoading,
+  } = useAuth();
+
+  if (isLoading) {
+    return <SplashPage />;
+  }
+
   return (
     <>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+      <Toaster />
 
       <AppRoutes />
     </>
   );
 }
-
-export default App;

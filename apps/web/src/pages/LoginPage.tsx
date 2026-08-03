@@ -7,121 +7,139 @@ import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 
 import {
-  loginSchema,
-  type LoginFormValues,
+    loginSchema,
+    type LoginFormValues,
 } from "../features/auth/loginSchema";
 
 import {
-  useLoginMutation,
+    useLoginMutation,
 } from "../features/auth/authApi";
 
 import {
-  useAppDispatch,
+    useAppDispatch,
+    useAppSelector,
 } from "../store/hooks";
 
 import {
-  setCredentials,
+    setCredentials,
 } from "../features/auth/authSlice";
 
+import { Navigate } from "react-router-dom";
+
 export default function LoginPage() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const [login, { isLoading }] =
-    useLoginMutation();
+    const {
+        isAuthenticated,
+    } = useAppSelector(
+        (state) => state.auth
+    );
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(
-      loginSchema
-    ),
-  });
-
-  const onSubmit = async (
-    values: LoginFormValues
-  ) => {
-    try {
-      const response =
-        await login(values).unwrap();
-
-      dispatch(
-        setCredentials({
-          accessToken:
-            response.data.accessToken,
-
-          user: response.data.user,
-        })
-      );
-
-      toast.success(
-        "Login Successful"
-      );
-
-      navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(
-        error?.data?.message ??
-          "Login failed"
-      );
+    if (isAuthenticated) {
+        return (
+            <Navigate
+                to="/dashboard"
+                replace
+            />
+        );
     }
-  };
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
-        <h1 className="mb-8 text-center text-3xl font-bold">
-          Workflow Pro
-        </h1>
+    const [login, { isLoading }] =
+        useLoginMutation();
 
-        <form
-          onSubmit={handleSubmit(
-            onSubmit
-          )}
-          className="space-y-5"
-        >
-          <Input
-            label="Email"
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormValues>({
+        resolver: zodResolver(
+            loginSchema
+        ),
+    });
 
-            type="email"
+    const onSubmit = async (
+        values: LoginFormValues
+    ) => {
+        try {
+            const response =
+                await login(values).unwrap();
 
-            placeholder="Enter email"
+            dispatch(
+                setCredentials({
+                    accessToken:
+                        response.data.accessToken,
 
-            error={
-              errors.email?.message
-            }
+                    user: response.data.user,
+                })
+            );
 
-            {...register("email")}
-          />
+            toast.success(
+                "Login Successful"
+            );
 
-          <Input
-            label="Password"
+            navigate("/dashboard");
+        } catch (error: any) {
+            toast.error(
+                error?.data?.message ??
+                "Login failed"
+            );
+        }
+    };
 
-            type="password"
+    return (
+        <div className="flex min-h-screen items-center justify-center bg-slate-100">
+            <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
+                <h1 className="mb-8 text-center text-3xl font-bold">
+                    Workflow Pro
+                </h1>
 
-            placeholder="Enter password"
+                <form
+                    onSubmit={handleSubmit(
+                        onSubmit
+                    )}
+                    className="space-y-5"
+                >
+                    <Input
+                        label="Email"
 
-            error={
-              errors.password
-                ?.message
-            }
+                        type="email"
 
-            {...register(
-              "password"
-            )}
-          />
+                        placeholder="Enter email"
 
-          <Button
-            type="submit"
-            loading={isLoading}
-          >
-            Login
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
-}
+                        error={
+                            errors.email?.message
+                        }
+
+                        {...register("email")}
+                    />
+
+                    <Input
+                        label="Password"
+
+                        type="password"
+
+                        placeholder="Enter password"
+
+                        error={
+                            errors.password
+                                ?.message
+                        }
+
+                        {...register(
+                            "password"
+                        )}
+                    />
+
+                    <Button
+                        type="submit"
+                        loading={isLoading}
+                    >
+                        Login
+                    </Button>
+                </form>
+            </div>
+        </div>
+    );
+}   
