@@ -2,6 +2,10 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
 uploads
 coverage
+
+# Environment variables
+.env
+.env.*
+!.env.example
