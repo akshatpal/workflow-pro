@@ -91,6 +91,7 @@ export const api =
 
     tagTypes: [
       "Auth",
+      "Dashboard",
       "Project",
       "Board",
       "Task",
