@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { ProjectService } from "../service/project.service.js";
 import { successResponse } from "../../../common/response/apiResponse.js";
+import { getCurrentUser } from "../../../common/utils/getCurrentUser.js";
 
 export class ProjectController {
   static async createProject(
@@ -10,7 +11,13 @@ export class ProjectController {
     next: NextFunction
   ) {
     try {
-      const project = await ProjectService.createProject(req.body);
+      const currentUser = getCurrentUser(req);
+
+      const project =
+        await ProjectService.createProject(
+          req.body,
+          currentUser.userId
+        );
 
       return successResponse(
         res,

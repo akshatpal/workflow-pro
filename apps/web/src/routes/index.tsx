@@ -11,6 +11,8 @@ import LoginPage from "@/pages/LoginPage";
 import DashboardPage from "@/pages/DashboardPage";
 
 import ProtectedRoute from "./ProtectedRoute";
+import ProjectsPage from "@/pages/ProjectsPage";
+import ProjectDetailsPage from "@/pages/ProjectDetailsPage";
 
 export default function AppRoutes() {
   return (
@@ -42,6 +44,16 @@ export default function AppRoutes() {
         <Route
           path="/dashboard"
           element={<DashboardPage />}
+        />
+
+        <Route
+          path="/projects"
+          element={<ProjectsPage />}
+        />
+        
+        <Route
+          path="/projects/:id"
+          element={<ProjectDetailsPage />}
         />
       </Route>
 

@@ -46,7 +46,9 @@ app.use(
   })
 );
 
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: true,
+}));
 
 app.use(morgan("dev"));
 
@@ -68,15 +70,15 @@ app.use("/api/v1/boards", boardRoutes);
 app.use("/api/v1/columns", columnRoutes);
 app.use("/api/v1/tasks", taskRoutes);
 app.use("/api/v1/comments", commentRoutes);
-app.use("/api/v1/attachments",attachmentRoutes);
-app.use("/api/v1/notifications",notificationRoutes);
+app.use("/api/v1/attachments", attachmentRoutes);
+app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);
 
-app.use("/uploads",express.static(path.join(process.cwd(), "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 app.use(errorMiddleware);
 

@@ -11,11 +11,12 @@ export interface ProjectMemberInput {
 
 export interface CreateProjectInput {
   name: string;
-  key: string;
-  description?: string;
-  avatar?: string;
 
-  owner: string;
+  key: string;
+
+  description?: string;
+
+  avatar?: string;
 
   visibility?: ProjectVisibility;
 

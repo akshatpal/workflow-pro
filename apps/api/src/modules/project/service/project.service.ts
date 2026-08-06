@@ -22,7 +22,8 @@ export class ProjectService {
      * Create Project
      */
     static async createProject(
-        payload: CreateProjectInput
+        payload: CreateProjectInput,
+        ownerId: string
     ) {
         const existingProject = await Project.findOne({
             key: payload.key.toUpperCase(),
@@ -35,7 +36,7 @@ export class ProjectService {
             );
         }
 
-        const owner = await UserModel.findById(payload.owner);
+        const owner = await UserModel.findById(ownerId);
 
         if (!owner || !owner.isActive) {
             throw new NotFoundError("Owner not found");

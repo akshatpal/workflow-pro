@@ -3,14 +3,14 @@ import { UnauthorizedError } from "../errors/UnauthorizedError.js";
 
 export const authorize =
   (...roles: string[]) =>
-  (req: Request, _res: Response, next: NextFunction) => {
-    if (!req.user) {
-      return next(new UnauthorizedError());
-    }
+    (req: Request, _res: Response, next: NextFunction) => {
+      if (!req.user) {
+        return next(new UnauthorizedError());
+      }
 
-    if (!roles.includes(req.user.role)) {
-      return next(new UnauthorizedError("Access denied"));
-    }
+      if (!roles.includes(req.user.role)) {
+        return next(new UnauthorizedError("Access denied"));
+      }
 
-    next();
-};
+      next();
+    };

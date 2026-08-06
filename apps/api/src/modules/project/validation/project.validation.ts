@@ -35,8 +35,6 @@ export const createProjectSchema = z.object({
 
     avatar: z.string().optional(),
 
-    owner: objectIdSchema,
-
     visibility: z
       .nativeEnum(ProjectVisibility)
       .optional(),
