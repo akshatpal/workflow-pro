@@ -15,3 +15,13 @@ export interface UpdateColumnInput {
 export interface ColumnQuery {
   board: string;
 }
+
+export interface ReorderColumnInput {
+  boardId: string;
+
+  columns: {
+    id: string;
+
+    position: number;
+  }[];
+}

@@ -63,3 +63,15 @@ export interface TaskQuery {
 
   limit?: number;
 }
+
+export interface ReorderTaskInput {
+  sourceColumnId: string;
+
+  destinationColumnId: string;
+
+  tasks: {
+    id: string;
+
+    position: number;
+  }[];
+}

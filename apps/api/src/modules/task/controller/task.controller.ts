@@ -144,4 +144,26 @@ export class TaskController {
       next(error);
     }
   }
+
+  static async reorderTask(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const task =
+        await TaskService.reorderTask(
+          req.body
+        );
+
+      return successResponse(
+        res,
+        200,
+        "Task reordered successfully",
+        task
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }

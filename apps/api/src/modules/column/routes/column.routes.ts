@@ -5,6 +5,9 @@ import { ColumnController } from "../controller/column.controller.js";
 import { authenticate } from "../../../common/middleware/auth.middleware.js";
 import { authorize } from "../../../common/middleware/authorize.middleware.js";
 import { validate } from "../../../common/middleware/validate.middleware.js";
+import {
+  reorderColumnsSchema,
+} from "../validation/column.validation.js";
 
 import {
   createColumnSchema,
@@ -32,6 +35,14 @@ router.get(
   "/board/:boardId",
   validate(getColumnsSchema),
   ColumnController.getColumns
+);
+
+router.patch(
+  "/reorder",
+  validate(
+    reorderColumnsSchema
+  ),
+  ColumnController.reorderColumns
 );
 
 router.get(

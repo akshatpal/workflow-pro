@@ -7,6 +7,7 @@ import {
   CreateTaskInput,
   UpdateTaskInput,
   TaskQuery,
+  ReorderTaskInput,
 } from "../types/task.types.js";
 
 import { Project } from "../../project/model/project.model.js";
@@ -266,5 +267,31 @@ export class TaskService {
       message:
         "Task deleted successfully",
     };
+  }
+
+  static async reorderTask(
+    payload: ReorderTaskInput
+  ) {
+    const updates = payload.tasks.map(
+      (task) =>
+        Task.updateOne(
+          {
+            _id: task.id,
+
+            isDeleted: false,
+          },
+          {
+            column:
+              payload.destinationColumnId,
+
+            position:
+              task.position,
+          }
+        )
+    );
+
+    await Promise.all(updates);
+
+    return true;
   }
 }

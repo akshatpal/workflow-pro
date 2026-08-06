@@ -11,42 +11,42 @@ import { Project } from "../../project/model/project.model.js";
 import { ColumnService } from "../../column/service/column.service.js";
 
 import { NotFoundError } from "../../../common/errors/NotFoundError.js";
+import { Column } from "../../column/model/column.model.js";
 
 export class BoardService {
   static async createBoard(
-    payload: CreateBoardInput
-    ) {
+payload: CreateBoardInput, userId: any  ) {
     const project = await Project.findById(
-        payload.project
+      payload.project
     );
 
     if (!project || project.isDeleted) {
-        throw new NotFoundError("Project not found");
+      throw new NotFoundError("Project not found");
     }
 
     const totalBoards =
-        await Board.countDocuments({
+      await Board.countDocuments({
         project: payload.project,
         isDeleted: false,
-        });
+      });
 
     const board = await Board.create({
-        name: payload.name,
-        description: payload.description,
-        type: payload.type,
-        project: payload.project,
-        createdBy: payload.createdBy,
-        position: totalBoards,
-        isDefault: totalBoards === 0,
+      name: payload.name,
+      description: payload.description,
+      type: payload.type,
+      project: payload.project,
+      createdBy: userId,
+      position: totalBoards,
+      isDefault: totalBoards === 0,
     });
 
     // Automatically create default columns
     await ColumnService.createDefaultColumns(
-        board._id.toString()
+      board._id.toString()
     );
 
     return BoardDto.toResponse(board as unknown as HydratedDocument<BoardDocument>);
-    }
+  }
 
   static async getBoards(
     projectId: string,
@@ -106,7 +106,26 @@ export class BoardService {
       );
     }
 
-    return BoardDto.toResponse(board as unknown as HydratedDocument<BoardDocument>);
+    const columns = await Column.find({
+      board: board._id,
+      isDeleted: false,
+    }).sort({
+      position: 1,
+    });
+
+    return {
+      ...BoardDto.toResponse(
+        board as HydratedDocument<BoardDocument>
+      ),
+
+      columns: columns.map((column) => ({
+        id: column._id.toString(),
+
+        name: column.name,
+
+        position: column.position,
+      })),
+    };
   }
 
   static async updateBoard(

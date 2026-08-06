@@ -13,6 +13,8 @@ import DashboardPage from "@/pages/DashboardPage";
 import ProtectedRoute from "./ProtectedRoute";
 import ProjectsPage from "@/pages/ProjectsPage";
 import ProjectDetailsPage from "@/pages/ProjectDetailsPage";
+import BoardsPage from "@/pages/BoardsPage";
+import BoardDetailsPage from "@/pages/BoardDetailsPage";
 
 export default function AppRoutes() {
   return (
@@ -50,10 +52,24 @@ export default function AppRoutes() {
           path="/projects"
           element={<ProjectsPage />}
         />
-        
+
         <Route
           path="/projects/:id"
           element={<ProjectDetailsPage />}
+        />
+
+        <Route
+          path="/projects/:projectId/boards"
+          element={
+            <BoardsPage />
+          }
+        />
+
+        <Route
+          path="/boards/:id"
+          element={
+            <BoardDetailsPage />
+          }
         />
       </Route>
 

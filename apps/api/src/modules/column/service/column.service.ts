@@ -5,6 +5,7 @@ import { ColumnDto } from "../dto/column.dto.js";
 
 import {
   CreateColumnInput,
+  ReorderColumnInput,
   UpdateColumnInput,
 } from "../types/column.types.js";
 
@@ -150,5 +151,29 @@ export class ColumnService {
     return ColumnDto.toResponseArray(
       createdColumns as unknown as HydratedDocument<ColumnDocument>[]
     );
+  }
+
+  static async reorderColumns(
+    payload: ReorderColumnInput
+  ) {
+    const updates =
+      payload.columns.map(
+        (column) =>
+          Column.updateOne(
+            {
+              _id: column.id,
+
+              board: payload.boardId,
+            },
+            {
+              position:
+                column.position,
+            }
+          )
+      );
+
+    await Promise.all(updates);
+
+    return true;
   }
 }

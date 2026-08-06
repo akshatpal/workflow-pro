@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { BoardService } from "../service/board.service.js";
 import { successResponse } from "../../../common/response/apiResponse.js";
+import { getCurrentUser } from "../../../common/utils/getCurrentUser.js";
 
 export class BoardController {
   static async createBoard(
@@ -10,7 +11,12 @@ export class BoardController {
     next: NextFunction
   ) {
     try {
-      const board = await BoardService.createBoard(req.body);
+      const currentUser = getCurrentUser(req);
+
+      const board = await BoardService.createBoard(
+        req.body,
+        currentUser.userId
+      );
 
       return successResponse(
         res,

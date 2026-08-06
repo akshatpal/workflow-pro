@@ -10,10 +10,8 @@ export const createBoardSchema = z.object({
 
     type: z.nativeEnum(BoardType).optional(),
 
-    project: objectIdSchema,
-
-    createdBy: objectIdSchema,
-  }),
+    project: objectIdSchema
+  })
 });
 
 export const updateBoardSchema = z.object({

@@ -62,3 +62,19 @@ export const updateTaskSchema = z.object({
     position: z.number().optional(),
   }),
 });
+
+export const reorderTaskSchema = z.object({
+  body: z.object({
+    sourceColumnId: objectIdSchema,
+
+    destinationColumnId: objectIdSchema,
+
+    tasks: z.array(
+      z.object({
+        id: objectIdSchema,
+
+        position: z.number().min(0),
+      })
+    ),
+  }),
+});

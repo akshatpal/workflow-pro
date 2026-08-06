@@ -117,4 +117,24 @@ export class ColumnController {
       next(error);
     }
   }
+
+  static async reorderColumns(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      await ColumnService.reorderColumns(
+        req.body
+      );
+
+      return successResponse(
+        res,
+        200,
+        "Columns reordered successfully"
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
 }

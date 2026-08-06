@@ -12,6 +12,9 @@ import {
 } from "../validation/task.validation.js";
 
 import { UserRole } from "../../user/model/user.model.js";
+import {
+  reorderTaskSchema,
+} from "../validation/task.validation.js";
 
 const router = Router();
 
@@ -36,6 +39,12 @@ router.get(
 router.get(
   "/:id",
   TaskController.getTaskById
+);
+
+router.patch(
+  "/reorder",
+  validate(reorderTaskSchema),
+  TaskController.reorderTask
 );
 
 router.patch(

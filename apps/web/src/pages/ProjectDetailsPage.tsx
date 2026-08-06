@@ -2,7 +2,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import Breadcrumb from "@/components/common/BreadCrumb";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import ErrorState from "@/components/common/ErrorState";
 
 import {

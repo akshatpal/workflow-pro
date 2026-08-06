@@ -34,3 +34,17 @@ export const getColumnsSchema = z.object({
     boardId: objectIdSchema,
   }),
 });
+
+export const reorderColumnsSchema = z.object({
+  body: z.object({
+    boardId: objectIdSchema,
+
+    columns: z.array(
+      z.object({
+        id: objectIdSchema,
+
+        position: z.number(),
+      })
+    ),
+  }),
+});
