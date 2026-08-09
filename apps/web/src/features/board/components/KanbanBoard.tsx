@@ -422,7 +422,7 @@ export default function KanbanBoard({
                     horizontalListSortingStrategy
                 }
             >
-                <div className="flex gap-6 overflow-x-auto pb-10">
+                <div className="flex gap-6 overflow-x-auto pb-10 scrollbar-thin">
                     {columns.map(
                         (column) => (
                             <Column

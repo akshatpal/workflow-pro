@@ -15,6 +15,7 @@ import ProjectsPage from "@/pages/ProjectsPage";
 import ProjectDetailsPage from "@/pages/ProjectDetailsPage";
 import BoardsPage from "@/pages/BoardsPage";
 import BoardDetailsPage from "@/pages/BoardDetailsPage";
+import TaskDetailsPage from "@/pages/TaskDetailsPage";
 
 export default function AppRoutes() {
   return (
@@ -69,6 +70,13 @@ export default function AppRoutes() {
           path="/boards/:id"
           element={
             <BoardDetailsPage />
+          }
+        />
+
+        <Route
+          path="/tasks/:id"
+          element={
+            <TaskDetailsPage />
           }
         />
       </Route>

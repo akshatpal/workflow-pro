@@ -1,72 +1,132 @@
+import { useState } from "react";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-import type { TaskCard as Task } from "../board.types";
+import type { Task } from "@/features/task/task.types";
+
+import PriorityBadge from "@/features/task/components/PriorityBadge";
+import StatusBadge from "@/features/task/components/StatusBadge";
+import TaskActions from "@/features/task/components/TaskActions";
+import EditTaskModal from "@/features/task/components/EditTaskModal";
+import DeleteTaskDialog from "@/features/task/components/DeleteTaskDialog";
+import { Link } from "react-router-dom";
 
 interface Props {
-    task: Task;
-    columnId: string;
+  task: Task;
+  columnId: string;
 }
 
 export default function TaskCard({
-    task,
-    columnId,
+  task,
+  columnId,
 }: Props) {
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
-        id: task.id,
+  const [editOpen, setEditOpen] =
+    useState(false);
 
-        data: {
-            type: "TASK",
+  const [deleteOpen, setDeleteOpen] =
+    useState(false);
 
-            task,
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: {
+      type: "TASK",
+      task,
+      columnId,
+    },
+  });
 
-            columnId,
-        },
-    });
+  const style = {
+    transform: CSS.Transform.toString(
+      transform
+    ),
+    transition,
+    opacity: isDragging ? 0 : 1,
+  };
 
-    const style = {
-        transform:
-            CSS.Transform.toString(
-                transform
-            ),
+  return (
+    <>
+      <EditTaskModal
+        open={editOpen}
+        task={task}
+        onClose={() =>
+          setEditOpen(false)
+        }
+      />
 
-        transition,
+      <DeleteTaskDialog
+        open={deleteOpen}
+        taskId={task.id}
+        onClose={() =>
+          setDeleteOpen(false)
+        }
+      />
 
-        opacity: isDragging
-            ? 0
-            : 1,
-    };
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className="mb-3 cursor-grab rounded-lg bg-white p-4 shadow transition-all duration-200 hover:shadow-lg active:cursor-grabbing"
+      >
+        <div className="flex items-start justify-between gap-2">
+          <Link
+            to={`/tasks/${task.id}`}
+            className="font-medium text-blue-600 hover:underline"
+            >
+            {task.title}
+          </Link>
 
-    return (
-        <div
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            {...listeners}
-            className="mb-3 cursor-grab rounded-lg bg-white p-4 shadow transition-all duration-200 hover:shadow-lg active:cursor-grabbing"
-        >
-            <h3 className="font-medium">
-                {task.title}
-            </h3>
-
-            <div className="mt-3 flex items-center justify-between">
-                <span className="rounded bg-slate-100 px-2 py-1 text-xs">
-                    {task.priority}
-                </span>
-
-                {task.assignee && (
-                    <span className="text-xs text-slate-500">
-                        {task.assignee.name}
-                    </span>
-                )}
-            </div>
+          <TaskActions
+            onEdit={() =>
+              setEditOpen(true)
+            }
+            onDelete={() =>
+              setDeleteOpen(true)
+            }
+          />
         </div>
-    );
+
+        <div className="mt-4 flex items-center justify-between">
+          <PriorityBadge
+            priority={task.priority}
+          />
+
+          <StatusBadge
+            status={task.status}
+          />
+        </div>
+
+        {task.assignee && (
+          <div className="mt-4 flex items-center gap-2 text-sm text-slate-500">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-600">
+              {task.assignee.name
+                .charAt(0)
+                .toUpperCase()}
+            </div>
+
+            <span>
+              {task.assignee.name}
+            </span>
+          </div>
+        )}
+
+        {task.dueDate && (
+          <div className="mt-3 text-xs text-slate-500">
+            Due:{" "}
+            {new Date(
+              task.dueDate
+            ).toLocaleDateString()}
+          </div>
+        )}
+      </div>
+    </>
+  );
 }

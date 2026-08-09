@@ -10,6 +10,10 @@ import type { Column as BoardColumn } from "../board.types";
 import ColumnHeader from "./ColumnHeader";
 import TaskCard from "./TaskCard";
 
+import { useState } from "react";
+
+import CreateTaskModal from "@/features/task/components/CreateTaskModal";
+
 interface Props {
   column: BoardColumn;
 }
@@ -33,17 +37,19 @@ export default function Column({
   });
 
   const style = {
-  transform:
-    CSS.Transform.toString(
-      transform
-    ),
+    transform:
+      CSS.Transform.toString(
+        transform
+      ),
 
-  transition,
+    transition,
 
-  opacity: isDragging
-    ? 0.5
-    : 1,
-};
+    opacity: isDragging
+      ? 0.5
+      : 1,
+  };
+  const [open, setOpen] =
+    useState(false);
 
   return (
     <div
@@ -51,7 +57,7 @@ export default function Column({
       style={style}
       {...attributes}
       {...listeners}
-      className="flex h-fit min-h-[650px] w-80 shrink-0 flex-col rounded-xl bg-slate-100 p-4 transition-all"
+      className="flex h-fit min-h-[650px] w-[340px] shrink-0 flex-col rounded-xl bg-slate-100 p-4 transition-all"
     >
       <ColumnHeader
         title={column.name}
@@ -74,7 +80,20 @@ export default function Column({
         </div>
       </SortableContext>
 
-      <button className="mt-4 rounded-lg border border-dashed py-3 transition hover:bg-slate-200">
+      <CreateTaskModal
+        open={open}
+        columnId={column.id}
+        onClose={() =>
+          setOpen(false)
+        }
+      />
+
+      <button
+        onClick={() =>
+          setOpen(true)
+        }
+        className="mt-4 rounded-lg border border-dashed py-3 transition hover:bg-slate-200"
+      >
         + Add Task
       </button>
     </div>

@@ -1,3 +1,5 @@
+import type { Task } from "@/features/task/task.types";
+
 export interface BoardListResponse {
   success: boolean;
 
@@ -20,26 +22,6 @@ export interface UpdateBoardRequest {
   description?: string;
 }
 
-export interface TaskCard {
-  id: string;
-
-  title: string;
-
-  priority: string;
-
-  status: string;
-
-  position: number;
-
-  assignee?: {
-    id: string;
-
-    name: string;
-
-    avatar?: string;
-  };
-}
-
 export interface Column {
   id: string;
 
@@ -47,7 +29,7 @@ export interface Column {
 
   position: number;
 
-  tasks?: TaskCard[];
+  tasks?: Task[];
 }
 
 export interface Board {

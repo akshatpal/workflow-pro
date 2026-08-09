@@ -97,6 +97,10 @@ export const api =
       "Task",
       "Comment",
       "Notification",
+      "User",
+      "Label",
+      "Comment",
+      "Attachment",
     ],
 
     endpoints: () => ({}),

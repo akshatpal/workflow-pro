@@ -1,5 +1,3 @@
-import { AlertTriangle } from "lucide-react";
-
 interface Props {
   message?: string;
 }
@@ -8,19 +6,14 @@ export default function ErrorState({
   message,
 }: Props) {
   return (
-    <div className="rounded-xl bg-white p-16 text-center shadow">
-      <AlertTriangle
-        size={70}
-        className="mx-auto text-red-500"
-      />
-
-      <h2 className="mt-6 text-2xl font-semibold">
+    <div className="rounded-xl border border-red-300 bg-red-50 py-12 text-center">
+      <h2 className="text-lg font-semibold text-red-600">
         Something went wrong
       </h2>
 
-      <p className="mt-3 text-slate-500">
+      <p className="mt-3 text-red-500">
         {message ??
-          "Unable to load data."}
+          "Please try again."}
       </p>
     </div>
   );
