@@ -12,6 +12,7 @@ import { ColumnService } from "../../column/service/column.service.js";
 
 import { NotFoundError } from "../../../common/errors/NotFoundError.js";
 import { Column } from "../../column/model/column.model.js";
+import { Task } from "../../task/model/task.model.js";
 
 export class BoardService {
   static async createBoard(
@@ -113,18 +114,43 @@ payload: CreateBoardInput, userId: any  ) {
       position: 1,
     });
 
+    const columnsWithTasks = await Promise.all(
+      columns.map(async (column) => {
+        const tasks = await Task.find({
+          column: column._id,
+          isDeleted: false,
+        })
+          .sort({ position: 1 })
+          .populate(
+            "assignee",
+            "name email profilePic"
+          )
+          .populate("labels");
+
+        return {
+          id: column._id.toString(),
+          name: column.name,
+          position: column.position,
+          tasks: tasks.map((task) => ({
+            id: task._id.toString(),
+            title: task.title,
+            priority: task.priority,
+            status: task.status,
+            position: task.position,
+            dueDate: task.dueDate,
+            assignee: task.assignee,
+            labels: task.labels,
+          })),
+        };
+      })
+    );
+
     return {
       ...BoardDto.toResponse(
         board as HydratedDocument<BoardDocument>
       ),
 
-      columns: columns.map((column) => ({
-        id: column._id.toString(),
-
-        name: column.name,
-
-        position: column.position,
-      })),
+      columns: columnsWithTasks,
     };
   }
 

@@ -13,15 +13,15 @@ export const createTaskSchema = z.object({
 
     description: z.string().optional(),
 
-    project: objectIdSchema,
+    project: objectIdSchema.optional(),
 
-    board: objectIdSchema,
+    board: objectIdSchema.optional(),
 
     column: objectIdSchema,
 
     assignee: objectIdSchema.optional(),
 
-    reporter: objectIdSchema,
+    reporter: objectIdSchema.optional(),
 
     priority: z.nativeEnum(TaskPriority).optional(),
 
@@ -29,9 +29,12 @@ export const createTaskSchema = z.object({
 
     storyPoints: z.number().optional(),
 
-    dueDate: z.string().datetime().optional(),
+    dueDate: z.string().optional(),
 
-    labels: z.array(z.string()).optional(),
+    labels: z
+      .array(objectIdSchema)
+      .optional(),
+
   }),
 });
 
@@ -53,9 +56,11 @@ export const updateTaskSchema = z.object({
 
     storyPoints: z.number().optional(),
 
-    dueDate: z.string().datetime().optional(),
+    dueDate: z.string().optional(),
 
-    labels: z.array(z.string()).optional(),
+    labels: z
+      .array(objectIdSchema)
+      .optional(),
 
     column: objectIdSchema.optional(),
 
@@ -65,15 +70,17 @@ export const updateTaskSchema = z.object({
 
 export const reorderTaskSchema = z.object({
   body: z.object({
-    sourceColumnId: objectIdSchema,
-
-    destinationColumnId: objectIdSchema,
-
-    tasks: z.array(
+    columns: z.array(
       z.object({
-        id: objectIdSchema,
+        columnId: objectIdSchema,
 
-        position: z.number().min(0),
+        tasks: z.array(
+          z.object({
+            id: objectIdSchema,
+
+            position: z.number().min(0),
+          })
+        ),
       })
     ),
   }),

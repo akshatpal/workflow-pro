@@ -57,19 +57,19 @@ export interface Task {
 
   position: number;
 
-  board: string;
+  board?: string;
 
-  column: string;
+  column?: string;
 
   assignee?: Assignee;
 
-  labels: Label[];
+  labels?: Label[];
 
   dueDate?: string;
 
-  createdAt: string;
+  createdAt?: string;
 
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface UpdateTaskRequest {

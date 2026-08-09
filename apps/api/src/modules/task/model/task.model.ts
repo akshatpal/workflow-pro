@@ -85,10 +85,12 @@ const taskSchema = new Schema(
       default: null,
     },
 
-    labels: {
-      type: [String],
-      default: [],
-    },
+    labels: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Label",
+      },
+    ],
 
     position: {
       type: Number,

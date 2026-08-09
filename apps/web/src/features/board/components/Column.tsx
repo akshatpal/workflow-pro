@@ -22,8 +22,8 @@ export default function Column({
   column,
 }: Props) {
   const {
-    attributes,
-    listeners,
+    attributes: dragAttributes,
+    listeners: dragListeners,
     setNodeRef,
     transform,
     transition,
@@ -55,13 +55,13 @@ export default function Column({
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
       className="flex h-fit min-h-[650px] w-[340px] shrink-0 flex-col rounded-xl bg-slate-100 p-4 transition-all"
     >
       <ColumnHeader
         title={column.name}
         count={(column.tasks ?? []).length}
+        dragListeners={dragListeners}
+        dragAttributes={dragAttributes}
       />
 
       <SortableContext
@@ -73,7 +73,7 @@ export default function Column({
           {(column.tasks ?? []).map((task) => (
             <TaskCard
               key={task.id}
-              task={task}
+              task={task as any}
               columnId={column.id}
             />
           ))}

@@ -21,26 +21,6 @@ export class TaskService {
   static async createTask(
     payload: CreateTaskInput
   ) {
-    const project = await Project.findById(
-      payload.project
-    );
-
-    if (!project || project.isDeleted) {
-      throw new NotFoundError(
-        "Project not found"
-      );
-    }
-
-    const board = await Board.findById(
-      payload.board
-    );
-
-    if (!board || board.isDeleted) {
-      throw new NotFoundError(
-        "Board not found"
-      );
-    }
-
     const column = await Column.findById(
       payload.column
     );
@@ -48,6 +28,28 @@ export class TaskService {
     if (!column || column.isDeleted) {
       throw new NotFoundError(
         "Column not found"
+      );
+    }
+
+    // Resolve board from the column if not provided
+    const boardId = payload.board ?? column.board?.toString();
+
+    const board = await Board.findById(boardId);
+
+    if (!board || board.isDeleted) {
+      throw new NotFoundError(
+        "Board not found"
+      );
+    }
+
+    // Resolve project from the board if not provided
+    const projectId = payload.project ?? board.project?.toString();
+
+    const project = await Project.findById(projectId);
+
+    if (!project || project.isDeleted) {
+      throw new NotFoundError(
+        "Project not found"
       );
     }
 
@@ -77,7 +79,7 @@ export class TaskService {
 
     const totalTasks =
       await Task.countDocuments({
-        project: payload.project,
+        project: projectId,
       });
 
     const taskNo = `${project.key}-${totalTasks + 1}`;
@@ -89,11 +91,42 @@ export class TaskService {
       });
 
     const task = await Task.create({
-      ...payload,
+      title: payload.title,
+
+      description:
+        payload.description,
 
       taskNo,
 
+      project: projectId,
+
+      board: boardId,
+
+      column: payload.column,
+
+      assignee:
+        payload.assignee,
+
+      reporter:
+        payload.reporter,
+
+      priority:
+        payload.priority,
+
+      status: payload.status,
+
+      storyPoints:
+        payload.storyPoints,
+
+      dueDate:
+        payload.dueDate,
+
+      labels:
+        payload.labels ?? [],
+
       position: totalColumnTasks,
+
+      isDeleted: false,
     });
 
     return TaskDto.toResponse(task as unknown as HydratedDocument<TaskDocument>);
@@ -148,6 +181,7 @@ export class TaskService {
       (page - 1) * limit;
 
     const tasks = await Task.find(filter)
+  .populate("labels")
       .populate(
         "assignee",
         "name email profilePic"
@@ -182,6 +216,7 @@ export class TaskService {
 
   static async getTaskById(id: string) {
     const task = await Task.findById(id)
+      .populate("labels")
       .populate(
         "assignee",
         "name email profilePic"
@@ -210,6 +245,13 @@ export class TaskService {
       throw new NotFoundError(
         "Task not found"
       );
+    }
+
+    if (
+      payload.labels !== undefined
+    ) {
+      task.labels =
+        payload.labels as any;
     }
 
     Object.assign(task, payload);
@@ -272,21 +314,19 @@ export class TaskService {
   static async reorderTask(
     payload: ReorderTaskInput
   ) {
-    const updates = payload.tasks.map(
-      (task) =>
-        Task.updateOne(
-          {
-            _id: task.id,
-
-            isDeleted: false,
-          },
-          {
-            column:
-              payload.destinationColumnId,
-
-            position:
-              task.position,
-          }
+    const updates = payload.columns.flatMap(
+      ({ columnId, tasks }) =>
+        tasks.map((task) =>
+          Task.updateOne(
+            {
+              _id: task.id,
+              isDeleted: false,
+            },
+            {
+              column: columnId,
+              position: task.position,
+            }
+          )
         )
     );
 

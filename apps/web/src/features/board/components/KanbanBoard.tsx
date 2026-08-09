@@ -142,13 +142,16 @@ export default function KanbanBoard({
         const sourceColumnId =
             active.data.current?.columnId;
 
-        const destinationColumnId =
-            over.data.current?.columnId;
+        // `over` can be either a TASK (has columnId) or a COLUMN (has column.id)
+        const overType = over.data.current?.type;
+        const destinationColumnId: string =
+            overType === "TASK"
+                ? over.data.current?.columnId
+                : overType === "COLUMN"
+                  ? over.data.current?.column?.id
+                  : undefined;
 
-        if (
-            !sourceColumnId ||
-            !destinationColumnId
-        )
+        if (!sourceColumnId || !destinationColumnId)
             return;
 
         const sourceColumnIndex =
@@ -177,16 +180,22 @@ export default function KanbanBoard({
             columns[destinationColumnIndex];
 
         const sourceTaskIndex =
-            sourceColumn.tasks.findIndex(
+            (sourceColumn.tasks ?? []).findIndex(
                 (task) =>
                     task.id === active.id
             );
 
-        const destinationTaskIndex =
-            destinationColumn.tasks.findIndex(
+        const rawDestinationTaskIndex =
+            (destinationColumn.tasks ?? []).findIndex(
                 (task) =>
                     task.id === over.id
             );
+
+        // -1 means dropped on empty column or column container → append to end
+        const destinationTaskIndex =
+            rawDestinationTaskIndex === -1
+                ? (destinationColumn.tasks ?? []).length
+                : rawDestinationTaskIndex;
 
         if (sourceTaskIndex === -1)
             return;
@@ -202,7 +211,7 @@ export default function KanbanBoard({
         ) {
             const reordered =
                 arrayMove(
-                    sourceColumn.tasks,
+                    sourceColumn.tasks ?? [],
                     sourceTaskIndex,
                     destinationTaskIndex
                 ).map((task, index) => ({
@@ -248,11 +257,11 @@ export default function KanbanBoard({
         // Different Column
 
         const sourceTasks = [
-            ...sourceColumn.tasks,
+            ...(sourceColumn.tasks ?? []),
         ];
 
         const destinationTasks = [
-            ...destinationColumn.tasks,
+            ...(destinationColumn.tasks ?? []),
         ];
 
         const [movedTask] =

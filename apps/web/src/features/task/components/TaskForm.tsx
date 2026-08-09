@@ -2,7 +2,6 @@ import type { UseFormRegister } from "react-hook-form";
 
 import {
   useGetUsersQuery,
-  useGetLabelsQuery,
 } from "../taskApi";
 
 import type {
@@ -18,9 +17,6 @@ export default function TaskForm({
 }: Props) {
   const { data: users = [] } =
     useGetUsersQuery();
-
-  const { data: labels = [] } =
-    useGetLabelsQuery();
 
   return (
     <div className="space-y-5">
@@ -112,29 +108,6 @@ export default function TaskForm({
           {...register("dueDate")}
           className="w-full rounded-lg border p-3"
         />
-      </div>
-
-      <div>
-        <label className="mb-2 block">
-          Labels
-        </label>
-
-        <select
-          multiple
-          {...register("labels")}
-          className="h-36 w-full rounded-lg border p-3"
-        >
-          {labels.map(
-            (label) => (
-              <option
-                key={label.id}
-                value={label.id}
-              >
-                {label.name}
-              </option>
-            )
-          )}
-        </select>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import { attachmentRoutes } from "./modules/attachment/index.js";
 import { notificationRoutes } from "./modules/notification/index.js";
 import { chatRoutes } from "./modules/chat/index.js";
 import { dashboardRoutes } from "./modules/dashboard/index.js";
+import { labelRoutes } from "./modules/label/index.js";
 
 
 
@@ -24,30 +25,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173"
-    ],
-
+    origin: true,
     credentials: true,
-
-    methods: [
-      "GET",
-      "POST",
-      "PUT",
-      "PATCH",
-      "DELETE",
-      "OPTIONS",
-    ],
-
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-    ],
   })
 );
 
 app.use(helmet({
-  crossOriginResourcePolicy: true,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
 
 app.use(morgan("dev"));
@@ -74,6 +58,7 @@ app.use("/api/v1/attachments", attachmentRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
+app.use("/api/v1/labels",labelRoutes);
 
 // Register routes here
 // app.use("/api/v1/auth", authRoutes);

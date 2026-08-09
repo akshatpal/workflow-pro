@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { TaskService } from "../service/task.service.js";
 import { successResponse } from "../../../common/response/apiResponse.js";
+import { getCurrentUser } from "../../../common/utils/getCurrentUser.js";
 
 export class TaskController {
   static async createTask(
@@ -10,7 +11,12 @@ export class TaskController {
     next: NextFunction
   ) {
     try {
-      const task = await TaskService.createTask(req.body);
+      const currentUser = getCurrentUser(req);
+
+      const task = await TaskService.createTask({
+        ...req.body,
+        reporter: req.body.reporter ?? currentUser.userId,
+      });
 
       return successResponse(
         res,

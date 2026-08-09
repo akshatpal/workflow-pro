@@ -96,18 +96,15 @@ export const taskApi =
           url: "/users",
         }),
 
+        transformResponse: (
+          response: {
+            data: {
+              users: Assignee[];
+            };
+          }
+        ) => response.data.users,
+
         providesTags: ["User"],
-      }),
-
-      getLabels: builder.query<
-        Label[],
-        void
-      >({
-        query: () => ({
-          url: "/labels",
-        }),
-
-        providesTags: ["Label"],
       }),
     }),
   });
@@ -118,5 +115,4 @@ export const {
   useGetTaskByIdQuery,
   useUpdateTaskMutation,
   useGetUsersQuery,
-  useGetLabelsQuery,
 } = taskApi;

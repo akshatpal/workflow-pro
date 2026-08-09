@@ -65,13 +65,13 @@ export interface TaskQuery {
 }
 
 export interface ReorderTaskInput {
-  sourceColumnId: string;
+  columns: {
+    columnId: string;
 
-  destinationColumnId: string;
+    tasks: {
+      id: string;
 
-  tasks: {
-    id: string;
-
-    position: number;
+      position: number;
+    }[];
   }[];
 }
