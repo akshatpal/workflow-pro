@@ -1,10 +1,8 @@
 import {
   FolderKanban,
   LayoutDashboard,
-  ClipboardList,
   Bell,
-  Settings,
-  MessageCircle
+  MessageCircle,
 } from "lucide-react";
 
 import {
@@ -25,12 +23,6 @@ const menus = [
   },
 
   {
-    title: "Tasks",
-    icon: ClipboardList,
-    path: "/tasks",
-  },
-
-  {
     title: "Notifications",
     icon: Bell,
     path: "/notifications",
@@ -40,12 +32,6 @@ const menus = [
     title: "Chat",
     icon: MessageCircle,
     path: "/chat",
-  },
-
-  {
-    title: "Settings",
-    icon: Settings,
-    path: "/settings",
   },
 ];
 
