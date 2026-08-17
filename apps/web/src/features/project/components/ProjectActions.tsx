@@ -10,16 +10,32 @@ export default function ProjectActions({
   onDelete,
 }: Props) {
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="flex items-center gap-2"
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       <button
-        onClick={onEdit}
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onEdit();
+        }}
         className="rounded-lg border p-2 transition hover:bg-slate-100"
       >
         <Pencil size={18} />
       </button>
 
       <button
-        onClick={onDelete}
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onDelete();
+        }}
         className="rounded-lg border border-red-300 p-2 text-red-600 transition hover:bg-red-50"
       >
         <Trash2 size={18} />
