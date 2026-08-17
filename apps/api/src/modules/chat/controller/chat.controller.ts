@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import { ChatService } from "../service/chat.service.js";
 import { successResponse } from "../../../common/response/apiResponse.js";
+import { getCurrentUser } from "../../../common/utils/getCurrentUser.js";
 
 export class ChatController {
   static async createConversation(
@@ -30,10 +31,11 @@ export class ChatController {
     next: NextFunction
   ) {
     try {
+      const currentUser = getCurrentUser(req);
+      const userId = (req.params.userId as string) || currentUser.userId;
+
       const conversations =
-        await ChatService.getConversations(
-          req.params.userId as string
-        );
+        await ChatService.getConversations(userId);
 
       return successResponse(
         res,

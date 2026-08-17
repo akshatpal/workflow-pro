@@ -1,9 +1,11 @@
 import { io, Socket } from "socket.io-client";
 
-// Strip the /api suffix if present — socket.io runs at the server root
-const SOCKET_URL = (
-  import.meta.env.VITE_API_URL as string
-).replace(/\/api\/?$/, "");
+const SOCKET_URL =
+  (import.meta.env.VITE_SOCKET_URL as string) ||
+  ((import.meta.env.VITE_API_URL as string) || "http://localhost:5000").replace(
+    /\/api.*$/,
+    ""
+  );
 
 let socket: Socket | null = null;
 
@@ -11,6 +13,7 @@ export const getSocket = (): Socket => {
   if (!socket) {
     socket = io(SOCKET_URL, {
       autoConnect: false,
+      withCredentials: true,
     });
   }
 
@@ -24,12 +27,13 @@ export const connectSocket = (userId: string) => {
     s.connect();
   }
 
-  // Join the user's personal room so the server can push targeted events
   s.emit("join", userId);
 };
 
 export const disconnectSocket = () => {
-  if (socket?.connected) {
+  if (socket) {
     socket.disconnect();
+    socket = null;
   }
 };
+

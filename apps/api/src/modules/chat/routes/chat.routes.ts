@@ -23,6 +23,11 @@ router.post(
 );
 
 router.get(
+  "/conversations",
+  ChatController.getConversations
+);
+
+router.get(
   "/conversations/:userId",
   ChatController.getConversations
 );

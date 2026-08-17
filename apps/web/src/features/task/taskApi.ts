@@ -3,7 +3,6 @@ import { api } from "@/store/api";
 import type {
   Assignee,
   CreateTaskRequest,
-  Label,
   Task,
   TaskResponse,
   UpdateTaskRequest,

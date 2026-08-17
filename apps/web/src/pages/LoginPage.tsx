@@ -28,7 +28,6 @@ import { Navigate } from "react-router-dom";
 
 export default function LoginPage() {
     const navigate = useNavigate();
-
     const dispatch = useAppDispatch();
 
     const {
@@ -36,15 +35,6 @@ export default function LoginPage() {
     } = useAppSelector(
         (state) => state.auth
     );
-
-    if (isAuthenticated) {
-        return (
-            <Navigate
-                to="/dashboard"
-                replace
-            />
-        );
-    }
 
     const [login, { isLoading }] =
         useLoginMutation();
@@ -58,6 +48,15 @@ export default function LoginPage() {
             loginSchema
         ),
     });
+
+    if (isAuthenticated) {
+        return (
+            <Navigate
+                to="/dashboard"
+                replace
+            />
+        );
+    }
 
     const onSubmit = async (
         values: LoginFormValues

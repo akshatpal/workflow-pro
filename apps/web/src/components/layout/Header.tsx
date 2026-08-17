@@ -23,6 +23,9 @@ import {
 
 import NotificationBell from "@/features/notification/components/NotificationBell";
 
+import { disconnectSocket } from "@/lib/socket";
+import { api } from "@/store/api";
+
 export default function Header() {
   const navigate =
     useNavigate();
@@ -35,7 +38,7 @@ export default function Header() {
       (state) => state.auth.user
     );
 
-  const [logoutApi] =
+  const [logoutApi, { isLoading: isLoggingOut }] =
     useLogoutMutation();
 
   const handleLogout =
@@ -44,9 +47,11 @@ export default function Header() {
         await logoutApi().unwrap();
       } catch {}
 
+      disconnectSocket();
       dispatch(logout());
+      dispatch(api.util.resetApiState());
 
-      navigate("/login");
+      navigate("/login", { replace: true });
     };
 
   return (
@@ -78,7 +83,8 @@ export default function Header() {
 
         <button
           onClick={handleLogout}
-          className="rounded-lg p-2 transition hover:bg-slate-100"
+          disabled={isLoggingOut}
+          className="rounded-lg p-2 transition hover:bg-slate-100 disabled:opacity-50"
         >
           <LogOut size={20} />
         </button>

@@ -101,6 +101,7 @@ export const api =
       "Label",
       "Comment",
       "Attachment",
+      "Chat"
     ],
 
     endpoints: () => ({}),

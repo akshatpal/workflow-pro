@@ -3,8 +3,8 @@ import {
   LayoutDashboard,
   ClipboardList,
   Bell,
-  MessageSquare,
   Settings,
+  MessageCircle
 } from "lucide-react";
 
 import {
@@ -38,7 +38,7 @@ const menus = [
 
   {
     title: "Chat",
-    icon: MessageSquare,
+    icon: MessageCircle,
     path: "/chat",
   },
 

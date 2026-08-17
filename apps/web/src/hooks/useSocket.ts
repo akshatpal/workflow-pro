@@ -13,12 +13,16 @@ import {
  * Mount this once at the top of the authenticated tree.
  */
 export function useSocket() {
-  const userId = useAppSelector(
-    (state) => state.auth.user?._id
+  const user = useAppSelector(
+    (state) => state.auth.user
   );
+  const userId = user?._id || user?.id;
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      disconnectSocket();
+      return;
+    }
 
     connectSocket(userId);
 

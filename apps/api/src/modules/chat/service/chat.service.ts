@@ -1,5 +1,5 @@
 import { HydratedDocument } from "mongoose";
-import { Conversation, ConversationDocument } from "../model/conversation.model.js";
+import { Conversation, ConversationDocument, ConversationType } from "../model/conversation.model.js";
 import { Message, MessageDocument } from "../model/message.model.js";
 
 import { UserModel } from "../../user/model/user.model.js";
@@ -43,6 +43,22 @@ export class ChatService {
       }
     }
 
+    if (payload.type === ConversationType.DIRECT && payload.members.length === 2) {
+      const existing = await Conversation.findOne({
+        type: ConversationType.DIRECT,
+        isDeleted: false,
+        "members.user": { $all: payload.members },
+      })
+        .populate("members.user", "name email profilePic")
+        .populate("lastMessage");
+
+      if (existing) {
+        return ChatDto.conversation(
+          existing as unknown as HydratedDocument<ConversationDocument>
+        );
+      }
+    }
+
     const conversation =
       await Conversation.create({
         name: payload.name,
@@ -59,6 +75,11 @@ export class ChatService {
           })
         ),
       });
+
+    await conversation.populate(
+      "members.user",
+      "name email profilePic"
+    );
 
     return ChatDto.conversation(
       conversation as unknown as HydratedDocument<ConversationDocument>

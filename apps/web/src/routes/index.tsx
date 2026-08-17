@@ -17,6 +17,7 @@ import BoardsPage from "@/pages/BoardsPage";
 import BoardDetailsPage from "@/pages/BoardDetailsPage";
 import TaskDetailsPage from "@/pages/TaskDetailsPage";
 import NotificationPage from "@/features/notification/pages/NotificationPage";
+import ChatPage from "@/features/chat/pages/ChatPage";
 
 export default function AppRoutes() {
   return (
@@ -85,6 +86,13 @@ export default function AppRoutes() {
           path="/notifications"
           element={
             <NotificationPage />
+          }
+        />
+
+        <Route
+          path="/chat"
+          element={
+            <ChatPage />
           }
         />
       </Route>

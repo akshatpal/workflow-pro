@@ -27,8 +27,9 @@ export default function useAuth() {
 
   useEffect(() => {
     if (isSuccess && data) {
+      const userPayload = (data as any).data ?? data;
       dispatch(
-        setUser(data.data)
+        setUser(userPayload)
       );
     }
 
