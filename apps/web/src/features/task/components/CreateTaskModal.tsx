@@ -10,6 +10,12 @@ import {
   useCreateTaskMutation,
 } from "../taskApi";
 
+import {
+  useCreateNotificationMutation,
+} from "@/features/notification/notificationApi";
+
+import { useAppSelector } from "@/store/hooks";
+
 import TaskForm from "./TaskForm";
 
 interface Props {
@@ -26,11 +32,16 @@ export default function CreateTaskModal({
   onClose,
 }: Props) {
   const [
-  createTask,
-  {
-    isLoading,
-  },
-] = useCreateTaskMutation();
+    createTask,
+    { isLoading },
+  ] = useCreateTaskMutation();
+
+  const [createNotification] =
+    useCreateNotificationMutation();
+
+  const currentUserId = useAppSelector(
+    (state) => state.auth.user?._id
+  );
 
   const {
     register,
@@ -48,16 +59,30 @@ export default function CreateTaskModal({
   const onSubmit = async (
     values: TaskFormValues
   ) => {
-    await createTask({
+    const task = await createTask({
       ...values,
 
       column: columnId,
     }).unwrap();
 
+    // Fire notification to the assignee
+    if (values.assignee) {
+      createNotification({
+        user: values.assignee,
+        sender: currentUserId,
+        title: "Task Assigned",
+        message: `You have been assigned task "${values.title}".`,
+        type: "TASK_ASSIGNED",
+        entityId: task.id,
+        entityType: "Task",
+      });
+    }
+
     reset();
 
     onClose();
   };
+
 
   if (!open) return null;
 

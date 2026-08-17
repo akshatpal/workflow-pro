@@ -21,6 +21,8 @@ import {
   useAppSelector,
 } from "@/store/hooks";
 
+import NotificationBell from "@/features/notification/components/NotificationBell";
+
 export default function Header() {
   const navigate =
     useNavigate();
@@ -62,10 +64,7 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-6">
-        <Bell
-          className="cursor-pointer"
-          size={22}
-        />
+        <NotificationBell />
 
         <div className="text-right">
           <p className="font-semibold">

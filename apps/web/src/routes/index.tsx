@@ -16,6 +16,7 @@ import ProjectDetailsPage from "@/pages/ProjectDetailsPage";
 import BoardsPage from "@/pages/BoardsPage";
 import BoardDetailsPage from "@/pages/BoardDetailsPage";
 import TaskDetailsPage from "@/pages/TaskDetailsPage";
+import NotificationPage from "@/features/notification/pages/NotificationPage";
 
 export default function AppRoutes() {
   return (
@@ -79,7 +80,15 @@ export default function AppRoutes() {
             <TaskDetailsPage />
           }
         />
+
+        <Route
+          path="/notifications"
+          element={
+            <NotificationPage />
+          }
+        />
       </Route>
+
 
       <Route
         path="*"

@@ -5,7 +5,9 @@ export interface LoginRequest {
 }
 
 export interface User {
-  id: string;
+  _id: string;
+
+  id?: string;
 
   name: string;
 

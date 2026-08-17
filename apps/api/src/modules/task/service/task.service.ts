@@ -16,6 +16,8 @@ import { Column } from "../../column/model/column.model.js";
 import { UserModel } from "../../user/model/user.model.js";
 
 import { NotFoundError } from "../../../common/errors/NotFoundError.js";
+import { NotificationService } from "../../notification/service/notification.service.js";
+import { NotificationType } from "../../notification/model/notification.model.js";
 
 export class TaskService {
   static async createTask(
@@ -128,6 +130,19 @@ export class TaskService {
 
       isDeleted: false,
     });
+
+    // Fire TASK_ASSIGNED notification if assignee is set
+    if (payload.assignee) {
+      await NotificationService.createNotification({
+        user: payload.assignee.toString(),
+        sender: payload.reporter?.toString(),
+        title: "Task Assigned",
+        message: `You have been assigned task "${task.title}" (${taskNo}).`,
+        type: NotificationType.TASK_ASSIGNED,
+        entityId: task._id.toString(),
+        entityType: "Task",
+      });
+    }
 
     return TaskDto.toResponse(task as unknown as HydratedDocument<TaskDocument>);
   }

@@ -19,6 +19,12 @@ import {
     useUpdateTaskMutation,
 } from "../taskApi";
 
+import {
+    useCreateNotificationMutation,
+} from "@/features/notification/notificationApi";
+
+import { useAppSelector } from "@/store/hooks";
+
 import TaskForm from "./TaskForm";
 
 import type {
@@ -42,6 +48,13 @@ export default function EditTaskModal({
         updateTask,
         { isLoading },
     ] = useUpdateTaskMutation();
+
+    const [createNotification] =
+        useCreateNotificationMutation();
+
+    const currentUserId = useAppSelector(
+        (state) => state.auth.user?._id
+    );
 
     const {
         register,
@@ -71,7 +84,7 @@ export default function EditTaskModal({
                 task.dueDate,
 
             labels:
-                task.labels.map(
+                task.labels?.map(
                     (label) =>
                         label.id
                 ),
@@ -88,6 +101,23 @@ export default function EditTaskModal({
 
             body: values,
         }).unwrap();
+
+        // Notify only if assignee changed to a new user
+        const previousAssigneeId = task.assignee?.id;
+        if (
+            values.assignee &&
+            values.assignee !== previousAssigneeId
+        ) {
+            createNotification({
+                user: values.assignee,
+                sender: currentUserId,
+                title: "Task Assigned",
+                message: `You have been assigned task "${task.title}".`,
+                type: "TASK_ASSIGNED",
+                entityId: task.id,
+                entityType: "Task",
+            });
+        }
 
         onClose();
     };
