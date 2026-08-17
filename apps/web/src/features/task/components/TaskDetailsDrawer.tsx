@@ -87,8 +87,7 @@ export default function TaskDetailsDrawer({
                 </h2>
 
                 <div className="flex flex-wrap gap-2">
-                    {task.labels.length ===
-                        0 ? (
+                    {!task.labels || task.labels.length === 0 ? (
                         <span className="text-slate-500">
                             No Labels
                         </span>
@@ -123,9 +122,9 @@ export default function TaskDetailsDrawer({
                         </span>
 
                         <span className="text-slate-500">
-                            {new Date(
-                                task.createdAt
-                            ).toLocaleString()}
+                            {task.createdAt
+                                ? new Date(task.createdAt).toLocaleString()
+                                : "-"}
                         </span>
                     </div>
 
@@ -135,9 +134,9 @@ export default function TaskDetailsDrawer({
                         </span>
 
                         <span className="text-slate-500">
-                            {new Date(
-                                task.updatedAt
-                            ).toLocaleString()}
+                            {task.updatedAt
+                                ? new Date(task.updatedAt).toLocaleString()
+                                : "-"}
                         </span>
                     </div>
 
@@ -162,9 +161,9 @@ export default function TaskDetailsDrawer({
                     </h2>
 
                     <p className="text-slate-500">
-                        {new Date(
-                            task.createdAt
-                        ).toLocaleString()}
+                        {task.createdAt
+                            ? new Date(task.createdAt).toLocaleString()
+                            : "-"}
                     </p>
                 </div>
 
@@ -174,9 +173,9 @@ export default function TaskDetailsDrawer({
                     </h2>
 
                     <p className="text-slate-500">
-                        {new Date(
-                            task.updatedAt
-                        ).toLocaleString()}
+                        {task.updatedAt
+                            ? new Date(task.updatedAt).toLocaleString()
+                            : "-"}
                     </p>
                 </div>
             </div>

@@ -1,6 +1,5 @@
 import {
   LogOut,
-  Bell,
   Search,
 } from "lucide-react";
 
