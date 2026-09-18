@@ -77,16 +77,15 @@ export class AuthController {
     );
   }
 
-  static async me(
-  req: Request,
-  res: Response,
-  next: NextFunction
+  static async getCurrentUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
   ) {
     try {
-
       const currentUser = getCurrentUser(req);
 
-      const user = await AuthService.me(currentUser.userId);
+      const user = await AuthService.getCurrentUser(currentUser.userId);
 
       return successResponse(
         res,
@@ -94,7 +93,6 @@ export class AuthController {
         "User fetched successfully",
         user
       );
-
     } catch (error) {
       next(error);
     }

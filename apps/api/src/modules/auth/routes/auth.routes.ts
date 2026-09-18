@@ -23,9 +23,9 @@ router.post(
 );
 
 router.get(
-  "/me",
+  "/current-user",
   authenticate,
-  AuthController.me
+  AuthController.getCurrentUser
 );
 
 export default router;

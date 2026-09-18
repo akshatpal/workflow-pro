@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import {
-  useMeQuery,
+  useGetCurrentUserQuery,
 } from "@/features/auth/authApi";
 
 import {
@@ -23,7 +23,7 @@ export default function useAuth() {
     error,
     isSuccess,
     isLoading,
-  } = useMeQuery();
+  } = useGetCurrentUserQuery();
 
   useEffect(() => {
     if (isSuccess && data) {

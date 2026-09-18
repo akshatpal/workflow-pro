@@ -32,10 +32,12 @@ export interface LoginResponse {
   };
 }
 
-export interface MeResponse {
+export interface CurrentUserResponse {
   success: boolean;
 
   message: string;
 
   data: User;
 }
+
+export type MeResponse = CurrentUserResponse;

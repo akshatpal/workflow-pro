@@ -63,7 +63,7 @@ export class AuthService {
     };
   }
 
-  static async me(userId: string) {
+  static async getCurrentUser(userId: string) {
       const user = await UserModel.findById(userId)
           .select("-password");
 

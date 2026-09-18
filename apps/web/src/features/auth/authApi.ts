@@ -3,7 +3,7 @@ import { api } from "@/store/api";
 import type {
   LoginRequest,
   LoginResponse,
-  MeResponse,
+  CurrentUserResponse,
 } from "./auth.types";
 
 export const authApi = api.injectEndpoints({
@@ -21,12 +21,12 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
-    me: builder.query<
-      MeResponse,
+    getCurrentUser: builder.query<
+      CurrentUserResponse,
       void
     >({
       query: () => ({
-        url: "/auth/me",
+        url: "/auth/current-user",
       }),
 
       providesTags: ["Auth"],
@@ -60,7 +60,9 @@ export const authApi = api.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useMeQuery,
+  useGetCurrentUserQuery,
   useRefreshMutation,
   useLogoutMutation,
 } = authApi;
+
+export const useMeQuery = useGetCurrentUserQuery;
