@@ -3,19 +3,25 @@ export interface Attachment {
 
   fileName: string;
 
-  fileUrl: string;
+  originalName?: string;
 
-  fileSize: number;
+  fileUrl?: string;
+
+  fileSize?: number;
+
+  size?: number;
 
   mimeType: string;
 
   task: string;
 
-  uploadedBy: {
-    id: string;
+  uploadedBy:
+    | {
+        id: string;
 
-    name: string;
-  };
+        name: string;
+      }
+    | string;
 
   createdAt: string;
 }

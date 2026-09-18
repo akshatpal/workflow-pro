@@ -1,6 +1,8 @@
 import {
     useState,
 } from "react";
+import { useAppSelector } from "@/store/hooks";
+import { getAuthUserId } from "@/features/auth/authUtils";
 
 import {
     useCreateCommentMutation,
@@ -16,6 +18,15 @@ export default function CommentForm({
     const [message, setMessage] =
         useState("");
 
+    const { user, accessToken } = useAppSelector(
+        (state) => state.auth
+    );
+
+    const currentUserId =
+        getAuthUserId(user, accessToken) ||
+        user?._id ||
+        user?.id;
+
     const [
         createComment,
         {
@@ -25,13 +36,13 @@ export default function CommentForm({
 
     const submit =
         async () => {
-            if (!message.trim())
+            if (!message.trim() || !currentUserId)
                 return;
 
             await createComment({
                 task: taskId,
-
-                message,
+                author: currentUserId,
+                message: message.trim(),
             }).unwrap();
 
             setMessage("");
@@ -52,7 +63,7 @@ export default function CommentForm({
             />
 
             <button
-                disabled={isLoading}
+                disabled={isLoading || !message.trim()}
                 onClick={submit}
                 className="rounded-lg bg-blue-600 px-5 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >

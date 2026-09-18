@@ -10,10 +10,6 @@ import type { Column as BoardColumn } from "../board.types";
 import ColumnHeader from "./ColumnHeader";
 import TaskCard from "./TaskCard";
 
-import { useState } from "react";
-
-import CreateTaskModal from "@/features/task/components/CreateTaskModal";
-
 interface Props {
   column: BoardColumn;
 }
@@ -48,8 +44,6 @@ export default function Column({
       ? 0.5
       : 1,
   };
-  const [open, setOpen] =
-    useState(false);
 
   return (
     <div
@@ -79,23 +73,6 @@ export default function Column({
           ))}
         </div>
       </SortableContext>
-
-      <CreateTaskModal
-        open={open}
-        columnId={column.id}
-        onClose={() =>
-          setOpen(false)
-        }
-      />
-
-      <button
-        onClick={() =>
-          setOpen(true)
-        }
-        className="mt-4 rounded-lg border border-dashed py-3 transition hover:bg-slate-200"
-      >
-        + Add Task
-      </button>
     </div>
   );
 }

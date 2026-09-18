@@ -5,6 +5,12 @@ import type {
   UpdateCommentRequest,
 } from "./comment.types";
 
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
 export const commentApi =
   api.injectEndpoints({
     endpoints: (builder) => ({
@@ -16,6 +22,15 @@ export const commentApi =
           query: (taskId) => ({
             url: `/comments/task/${taskId}`,
           }),
+
+          transformResponse: (
+            response: ApiResponse<Comment[]> | Comment[]
+          ) => {
+            if ("data" in response && Array.isArray(response.data)) {
+              return response.data;
+            }
+            return Array.isArray(response) ? response : [];
+          },
 
           providesTags: [
             "Comment",
@@ -34,6 +49,15 @@ export const commentApi =
 
             body,
           }),
+
+          transformResponse: (
+            response: ApiResponse<Comment> | Comment
+          ) => {
+            if ("data" in response && response.data) {
+              return response.data;
+            }
+            return response as Comment;
+          },
 
           invalidatesTags: [
             "Comment",
@@ -59,6 +83,15 @@ export const commentApi =
 
             body,
           }),
+
+          transformResponse: (
+            response: ApiResponse<Comment> | Comment
+          ) => {
+            if ("data" in response && response.data) {
+              return response.data;
+            }
+            return response as Comment;
+          },
 
           invalidatesTags: [
             "Comment",

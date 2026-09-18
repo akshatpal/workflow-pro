@@ -23,6 +23,13 @@ export default function CommentItem({
     setDeleteOpen,
   ] = useState(false);
 
+  const authorName =
+    (typeof comment.author === "object" && comment.author?.name) ||
+    comment.user?.name ||
+    "User";
+
+  const authorInitial = authorName.charAt(0).toUpperCase();
+
   return (
     <>
       <EditCommentModal
@@ -45,14 +52,12 @@ export default function CommentItem({
         <div className="flex items-start justify-between">
           <div className="flex gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-700">
-              {comment.user.name.charAt(
-                0
-              )}
+              {authorInitial}
             </div>
 
             <div>
               <p className="font-medium">
-                {comment.user.name}
+                {authorName}
               </p>
 
               <p className="text-xs text-slate-500">

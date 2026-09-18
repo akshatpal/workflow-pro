@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import type {
   DashboardTask,
 } from "../dashboard.types";
@@ -17,11 +19,12 @@ export default function MyTasks({
 
       <div className="space-y-4">
         {tasks.map((task) => (
-          <div
+          <Link
             key={task.id}
-            className="rounded-lg border p-4"
+            to={`/tasks/${task.id}`}
+            className="block rounded-lg border p-4 transition-all hover:border-blue-400 hover:shadow-sm"
           >
-            <h3 className="font-semibold">
+            <h3 className="font-semibold text-slate-800 hover:text-blue-600">
               {task.title}
             </h3>
 
@@ -30,11 +33,11 @@ export default function MyTasks({
                 {task.project?.key}
               </span>
 
-              <span>
-                {task.status}
+              <span className="capitalize">
+                {task.status?.toLowerCase().replace(/_/g, " ")}
               </span>
             </div>
-          </div>
+          </Link>
         ))}
 
         {tasks.length === 0 && (

@@ -1,6 +1,12 @@
 import { api } from "@/store/api";
 import type { Attachment } from "./attachment.types";
 
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
 export const attachmentApi =
   api.injectEndpoints({
     endpoints: (builder) => ({
@@ -12,6 +18,15 @@ export const attachmentApi =
           query: (taskId) => ({
             url: `/attachments/task/${taskId}`,
           }),
+
+          transformResponse: (
+            response: ApiResponse<Attachment[]> | Attachment[]
+          ) => {
+            if ("data" in response && Array.isArray(response.data)) {
+              return response.data;
+            }
+            return Array.isArray(response) ? response : [];
+          },
 
           providesTags: [
             "Attachment",
@@ -30,6 +45,15 @@ export const attachmentApi =
 
             body,
           }),
+
+          transformResponse: (
+            response: ApiResponse<Attachment> | Attachment
+          ) => {
+            if ("data" in response && response.data) {
+              return response.data;
+            }
+            return response as Attachment;
+          },
 
           invalidatesTags: [
             "Attachment",

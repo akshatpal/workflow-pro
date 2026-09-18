@@ -5,13 +5,25 @@ export interface Comment {
 
   task: string;
 
-  user: {
+  author?:
+    | {
+        id?: string;
+        _id?: string;
+        name: string;
+        email?: string;
+        profilePic?: string;
+      }
+    | string;
+
+  user?: {
     id: string;
 
     name: string;
 
     avatar?: string;
   };
+
+  edited?: boolean;
 
   createdAt: string;
 
@@ -20,6 +32,8 @@ export interface Comment {
 
 export interface CreateCommentRequest {
   task: string;
+
+  author: string;
 
   message: string;
 }
